@@ -1,4 +1,3 @@
-from audioop import cross
 import json
 import requests
 from blockchair.exceptions import APIError, FormatError
