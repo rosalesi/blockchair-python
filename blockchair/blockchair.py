@@ -8,10 +8,10 @@ class Blockchair:
                        "dogecoin", "dash", "groestlcoin", "zcash", "ecash",
                        "ethereum", "ripple", "stellar", "monero", "cardano"
                        "mixin", "tezos", "eos", "cross-chain"]
-        self.cross_chain_coins = ["tether", "usd-coin", "binance-usd"]
+        self.tokens = ["tether", "usd-coin", "binance-usd"]
         self.testnets = ["bitcoin", "ethereum"]
 
-    def stats(self, chain=None, testnet=False, cross_chain_coin=None) -> json:
+    def stats(self, chain=None, testnet=False, token=None) -> json:
         payload = "https://api.blockchair.com/"
         if chain is None:
             payload += "stats"
@@ -25,15 +25,15 @@ class Blockchair:
                         chain + " does not have a supported testnet."
                     )
             elif chain == "cross-chain":
-                if cross_chain_coin in self.cross_chain_coins:
-                    payload += "/" + cross_chain_coin
+                if token in self.tokens:
+                    payload += "/" + token
                 else:
                     raise FormatError(
-                        cross_chain_coin + " is not a supported cross-chain coin."
+                        token + " is not a supported cross-chain coin."
                     )
-            elif cross_chain_coin is not None:
+            elif token is not None:
                 raise FormatError(
-                    "Please specify the chain as 'cross-chain' if you'd like to explore " + cross_chain_coin
+                    "Please specify the chain as 'cross-chain' if you'd like to explore " + token
                 )
             payload += "/stats"
         else:

@@ -1,4 +1,5 @@
 from audioop import cross
+from lib2to3.pgen2 import token
 import unittest
 
 from blockchair import Blockchair
@@ -27,13 +28,13 @@ class TestBlockchair(unittest.TestCase):
             result = bc.stats("tezos", testnet=True)
 
         with self.assertRaises(FormatError):
-            result = bc.stats("cross-chain", cross_chain_coin="FEI")
+            result = bc.stats("cross-chain", token="FEI")
 
         with self.assertRaises(FormatError):
-            result = bc.stats("cross-chain", testnet=True, cross_chain_coin="usd-coin")
+            result = bc.stats("cross-chain", testnet=True, token="usd-coin")
 
         with self.assertRaises(FormatError):
-            result = bc.stats("bitcoin", cross_chain_coin="usd-coin")
+            result = bc.stats("bitcoin", token="usd-coin")
 
         
 
