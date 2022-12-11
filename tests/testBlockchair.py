@@ -36,7 +36,5 @@ class TestBlockchair(unittest.TestCase):
         with self.assertRaises(FormatError):
             result = bc.stats("bitcoin", token="usd-coin")
 
-        
-
 if __name__ == '__main__':
     unittest.main()

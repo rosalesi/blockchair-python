@@ -1,4 +1,3 @@
-import json
 import requests
 from blockchair.exceptions import APIError, FormatError
 
@@ -11,7 +10,7 @@ class Blockchair:
         self.tokens = ["tether", "usd-coin", "binance-usd"]
         self.testnets = ["bitcoin", "ethereum"]
 
-    def stats(self, chain=None, testnet=False, token=None) -> json:
+    def stats(self, chain=None, testnet=False, token=None) -> dict:
         payload = "https://api.blockchair.com/"
         if chain is None:
             payload += "stats"
@@ -48,6 +47,8 @@ class Blockchair:
                 r.status_code
             )
         else:
-            return r.json()
+            return r.json()['data']
 
+    def dashboards(self):
+        pass
     
