@@ -4,7 +4,7 @@ Unofficial Python API bindings for Blockchair's public REST API.
 Note: This is a work in progress. Feel free to contribute.
 
 # Coverage
-- [] General stats endpoints
+- [x] General stats endpoints
     - [x] Stats on multiple blockchains at once
     - [x] Bitcoin-like blockchain stats
     - [x] Ethereum-like blockchain stats
