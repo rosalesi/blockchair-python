@@ -72,7 +72,7 @@ class Blockchair:
         else:
             return r.json()['data']
 
-    def blocks(self, chain : str, blockNo : list[str]) -> dict:
+    def blocks(self, chain : str, blockNo : list) -> dict:
         """
         Interface for Blockchair's blockchain block data. Support for 
         BTC-related chains and ETH.
@@ -86,8 +86,21 @@ class Blockchair:
 
         payload = "https://api.blockchair.com/"
         
-
-               
+        if(chain not in self.btc_chains
+            and chain != "ethereum"):
+                raise FormatError(
+                    "Please enter a BTC or ETH related chain."
+                )
+        elif (len(blockNo) < 1):
+            raise FormatError(
+                "Please enter at least one block height or block hash."
+            )
+        else:
+            payload += chain + "/dashboards/blocks/"
+            for b in blockNo:
+                payload += b + ","
+            payload = payload[ : -1]
+        
         r = requests.get(payload)
         if r.status_code != 200:
             raise APIError(

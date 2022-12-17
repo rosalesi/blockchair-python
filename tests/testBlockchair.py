@@ -36,5 +36,22 @@ class TestBlockchair(unittest.TestCase):
         with self.assertRaises(FormatError):
             result = bc.stats("bitcoin", token="usd-coin")
 
+    """
+    Tests for the blocks function
+    """
+    def testBlocks(self):
+        bc = Blockchair()
+
+        """
+        Exception handling testing for the blocks() method.
+        """
+        with self.assertRaises(FormatError):
+            result = bc.blocks("ripple", ["0"])
+
+        with self.assertRaises(FormatError):
+            result = bc.blocks("bitcoin", [])
+
+
+
 if __name__ == '__main__':
     unittest.main()
