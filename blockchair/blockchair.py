@@ -2,15 +2,38 @@ import requests
 from blockchair.exceptions import APIError, FormatError
 
 class Blockchair:
+
+    """
+    Initializes Blockchair Object with it's supported chains, testnets, and tokens as 
+    member variables.
+
+    Parameters:
+        None
+
+    Returns:
+        Blockchair Object
+    """
     def __init__(self) -> None:
-        self.chains = ["bitcoin", "bitcoin-cash", "litecoin", "bitcoin-sv",
-                       "dogecoin", "dash", "groestlcoin", "zcash", "ecash",
-                       "ethereum", "ripple", "stellar", "monero", "cardano"
-                       "mixin", "tezos", "eos", "cross-chain"]
+        self.btc_chains = ["bitcoin", "bitcoin-cash", "litecoin", "bitcoin-sv",
+                                "dogecoin", "dash", "groestlcoin", "zcash", "ecash"]
+        self.chains = self.btc_chains + ["ethereum", "ripple", "stellar", "monero", "cardano"
+                                    "mixin", "tezos", "eos", "cross-chain"]
         self.tokens = ["tether", "usd-coin", "binance-usd"]
         self.testnets = ["bitcoin", "ethereum"]
 
     def stats(self, chain=None, testnet=False, token=None) -> dict:
+        """
+        Accesses Blockchair's stats endpoint for supported chains and testnets.
+
+        Parameters:
+            chain (str) : Optional. Blockchair supported chain.
+            testnet (bool) : Optional. For BTC or ETH testnets.
+            token (str) : Optional. For cross-chain token stats.
+
+        Returns:
+            dict 
+        """
+
         payload = "https://api.blockchair.com/"
         if chain is None:
             payload += "stats"
@@ -49,6 +72,28 @@ class Blockchair:
         else:
             return r.json()['data']
 
-    def dashboards(self):
-        pass
+    def blocks(self, chain : str, blockNo : list[str]) -> dict:
+        """
+        Interface for Blockchair's blockchain block data. Support for 
+        BTC-related chains and ETH.
+
+        Parameters:
+            chain (str) : Blockchair API dashboard endpoint supported chain.
+
+        Returns:
+            dict
+        """
+
+        payload = "https://api.blockchair.com/"
+        
+
+               
+        r = requests.get(payload)
+        if r.status_code != 200:
+            raise APIError(
+                r.reason,
+                r.status_code
+            )
+        else:
+            return r.json()['data']
     
