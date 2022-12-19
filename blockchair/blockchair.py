@@ -79,7 +79,7 @@ class Blockchair:
 
         Parameters:
             chain (str) : Blockchair API dashboard endpoint supported chain.
-
+            blockNo (list[str]) : List of either block numbers of block hashes as strings
         Returns:
             dict
         """
@@ -95,11 +95,11 @@ class Blockchair:
             raise FormatError(
                 "Please enter at least one block height or block hash."
             )
-        else:
-            payload += chain + "/dashboards/blocks/"
-            for b in blockNo:
-                payload += b + ","
-            payload = payload[ : -1]
+
+        payload += chain + "/dashboards/blocks/"
+        for b in blockNo:
+            payload += b + ","
+        payload = payload[ : -1]
         
         r = requests.get(payload)
         if r.status_code != 200:
@@ -109,4 +109,42 @@ class Blockchair:
             )
         else:
             return r.json()['data']
+
+    def transactions(self, chain : str, hashes : list):
+        """
+        Interface for Blockchair transaction data. Supports BTC related chains and ETH.
+
+        Parameters:
+            chain (str) : Blockchair supported BTC chains or ETH 
+            hashes (list[str]) : List of transaction hashes as strings
+        Returns:
+            dict
+        """
+        
+        payload = "https://api.blockchair.com/"
+
+        if(chain not in self.btc_chains
+            and chain != "ethereum"):
+                raise FormatError(
+                    "Please enter a BTC or ETH related chain."
+                )
+        elif (len(hashes) < 1):
+            raise FormatError(
+                "Please enter at least one block height or block hash."
+            )
+
+        payload += chain + "/dashboards/transactions/"
+        for hash in hashes:
+            payload += hash + ","
+        payload = payload[ : -1]
+
+        r = requests.get(payload)
+        if r.status_code != 200:
+            raise APIError(
+                r.reason,
+                r.status_code
+            )
+        else:
+            return r.json()['data']
+
     

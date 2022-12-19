@@ -1,10 +1,7 @@
-from audioop import cross
-from lib2to3.pgen2 import token
 import unittest
 
 from blockchair import Blockchair
 from blockchair import FormatError
-from blockchair import APIError
 
 """
 Tests for the Blockchair class
@@ -50,6 +47,23 @@ class TestBlockchair(unittest.TestCase):
 
         with self.assertRaises(FormatError):
             result = bc.blocks("bitcoin", [])
+
+    def testTransactions(self):
+        bc = Blockchair()
+
+        tx = bc.transactions("ethereum", ["0xf536bdfb88fa7fcc160ceeb572458eb35f7a6af3a32b7e756d6661cf08a43cf5"])
+
+        print(len(tx.items()))
+        """
+        Exception handling testing for the transactions() method.
+        """
+        with self.assertRaises(FormatError):
+            result = bc.transactions("bitcoin", [])
+
+        with self.assertRaises(FormatError):
+            result = bc.transactions("ripple", ["0"])
+
+
 
 
 
