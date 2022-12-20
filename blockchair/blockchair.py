@@ -35,33 +35,33 @@ class Blockchair:
         """
 
         payload = "https://api.blockchair.com/"
-        if chain is None:
-            payload += "stats"
-        elif chain in self.chains:
-            payload += chain
-            if testnet:
-                if chain in self.testnets:
-                    payload += "/testnet"
-                else:
-                    raise FormatError(
-                        chain + " does not have a supported testnet."
-                    )
-            elif chain == "cross-chain":
-                if token in self.tokens:
-                    payload += "/" + token
-                else:
-                    raise FormatError(
-                        token + " is not a supported cross-chain coin."
-                    )
-            elif token is not None:
-                raise FormatError(
-                    "Please specify the chain as 'cross-chain' if you'd like to explore " + token
-                )
-            payload += "/stats"
-        else:
+
+        if(chain and chain not in self.chains):
             raise FormatError(
                 "Please enter a supported chain."
             )
+        if(testnet and chain not in self.testnets):
+            raise FormatError(
+                chain + " does not have a supported testnet."
+            )
+        if(token and token not in self.tokens):
+            raise FormatError(
+                token + " is not a supported cross-chain coin."
+            )
+        if(chain and chain != "cross-chain" and token):
+            raise FormatError(
+                "Please specify the chain as 'cross-chain' if you'd like to explore " + token
+            )
+
+        if not chain:
+            payload += "stats"
+        else:
+            payload += chain
+            if testnet:
+                payload += "/testnet"
+            elif chain == "cross-chain":
+                payload += "/" + token
+            payload += "/stats"
         
         r = requests.get(payload)
         if r.status_code != 200:
@@ -69,8 +69,7 @@ class Blockchair:
                 r.reason,
                 r.status_code
             )
-        else:
-            return r.json()['data']
+        return r.json()['data']
 
     def blocks(self, chain : str, blockNo : list) -> dict:
         """
@@ -88,10 +87,10 @@ class Blockchair:
         
         if(chain not in self.btc_chains
             and chain != "ethereum"):
-                raise FormatError(
-                    "Please enter a BTC or ETH related chain."
-                )
-        elif (len(blockNo) < 1):
+            raise FormatError(
+                "Please enter a BTC or ETH related chain."
+            )
+        if (len(blockNo) < 1):
             raise FormatError(
                 "Please enter at least one block height or block hash."
             )
@@ -107,8 +106,7 @@ class Blockchair:
                 r.reason,
                 r.status_code
             )
-        else:
-            return r.json()['data']
+        return r.json()['data']
 
     def transactions(self, chain : str, hashes : list):
         """
@@ -125,10 +123,10 @@ class Blockchair:
 
         if(chain not in self.btc_chains
             and chain != "ethereum"):
-                raise FormatError(
-                    "Please enter a BTC or ETH related chain."
-                )
-        elif (len(hashes) < 1):
+            raise FormatError(
+                "Please enter a BTC or ETH related chain."
+            )
+        if (len(hashes) < 1):
             raise FormatError(
                 "Please enter at least one block height or block hash."
             )
@@ -144,7 +142,6 @@ class Blockchair:
                 r.reason,
                 r.status_code
             )
-        else:
-            return r.json()['data']
+        return r.json()['data']
 
     
